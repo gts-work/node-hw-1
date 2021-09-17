@@ -1,0 +1,1 @@
+console.log('Grii, Hello World!');
