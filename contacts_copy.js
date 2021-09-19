@@ -7,7 +7,7 @@ const contacts = require("./db/contacts.json");
 const contactsPath = path.join(__dirname, "db/contacts.json");
 console.log("contactsPath: ", contactsPath);
 
-fs.readFile(contactsPath);
+// fs.readFile(contactsPath);
 
 const updateContacts = async (contacts) => {
     await fs.writeFile(contactsPath, JSON.stringify(contacts));

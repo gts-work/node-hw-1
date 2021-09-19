@@ -1,51 +1,71 @@
+const { program } = require("commander");
+require("colors");
+
 const contactsOperation = require("./contacts");
 
-console.log("Gri, Hello World!");
+program
+    .option("-a, --action <type>", "action type")
+    .option("-i, --id <type>", "contact id")
+    .option("-n, --name <type>", "contact name")
+    .option("-e, --email <type>", "contact email")
+    .option("-p, --phone <type>", "contact phone");
 
-const id = 5;
-const newContactData = {
-    name: "Alex Bro",
-    email: "alex-bro@mail.com",
-    phone: "44-123-45-67",
-};
-const delId = "c08128ea-0edb-401e-b3e2-ab5bb0253b90";
+program.parse(process.argv);
 
-// Test
+const options = program.opts();
+
 (async () => {
-    try {
-        // // Get all
-        // const contacts = await contactsOperation.listContacts();
-        // console.log(`contacts: ${contacts}`);
+    const { action, id, name, email, phone } = options;
 
-        // // Get ById
-        // const contactId = await contactsOperation.getContactById(id);
+    switch (action) {
+        case "list":
+            const contacts = await contactsOperation.listContacts();
+            console.log("All Contacts: ".green, contacts);
+            break;
+        case "get":
+            if (!id) {
+                console.log("Be sure to include id".red);
+                break;
+            }
+            const contactId = await contactsOperation.getContactById(id);
 
-        // if (!contactId) {
-        //     throw new Error(`Contact with id=${contactId} does not exists`);
-        // }
+            if (!contactId) {
+                console.log(`Contact with id=${id} does not exists`.red);
+                break;
+            }
 
-        // console.log("contactId: ", contactId);
+            console.log("Get Contact: ".green, contactId);
+            break;
+        case "add":
+            if (!name || !email || !phone) {
+                console.log("Be sure to include name, email and phone".red);
+                break;
+            }
 
-        // Add contact
-        // const newContact = await contactsOperation.addContact(
-        //     newContactData.name,
-        //     newContactData.email,
-        //     newContactData.phone
-        // );
-        // console.log("newContact: ", newContact);
+            const newContact = await contactsOperation.addContact(
+                name,
+                email,
+                phone
+            );
+            console.log("New Contact: ", newContact);
+            break;
+        case "remove":
+            if (!id) {
+                console.log("Be sure to include id".red);
+                break;
+            }
 
-        // Delete contact
-        const delContact = await contactsOperation.removeContact(delId);
+            const delContact = await contactsOperation.removeContact(id);
 
-        if (!delContact) {
-            throw new Error(`Contact with id=${delId} does not exists`);
-        }
-
-        const success = `Contact with id=${delId} is removed`;
-
-        console.log("delContact: ", success);
-    } catch (error) {
-        console.log(`ERROR: ${error.message}`);
+            if (!delContact) {
+                console.log(`Contact with id=${id} does not exists`);
+                break;
+            }
+            const success = `Contact with id=${id} is removed`;
+            console.log("delContact: ", success);
+            break;
+        default:
+            console.log("неизвестная команда");
     }
 })();
 
