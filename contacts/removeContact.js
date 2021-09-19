@@ -3,10 +3,9 @@ const listContacts = require("./listContacts");
 
 async function removeContact(contactId) {
     const contacts = await listContacts();
-    const idx = await contacts.findIndex(
-        (item) => item.id === Number(contactId)
-    );
-    // console.log("removeContact ~ idx: ", idx);
+    const idx = await contacts.findIndex((item) => {
+        return item.id === Number(contactId);
+    });
 
     if (idx === -1) {
         return null;

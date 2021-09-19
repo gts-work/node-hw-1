@@ -20,7 +20,7 @@ const options = program.opts();
     switch (action) {
         case "list":
             const contacts = await contactsOperation.listContacts();
-            console.log("All Contacts: ".green, contacts);
+            console.table(contacts);
             break;
         case "get":
             if (!id) {
@@ -47,7 +47,7 @@ const options = program.opts();
                 email,
                 phone
             );
-            console.log("New Contact: ", newContact);
+            console.log("New Contact: ".green, newContact);
             break;
         case "remove":
             if (!id) {
@@ -62,7 +62,7 @@ const options = program.opts();
                 break;
             }
             const success = `Contact with id=${id} is removed`;
-            console.log("delContact: ", success);
+            console.log("Remove Contact: ".green, success);
             break;
         default:
             console.log("неизвестная команда");
